@@ -1,7 +1,7 @@
 # pyobigram
 api sencilla para la creacion de bots de telegram , actualmente v0.1 , la estara actualizando aqui en mi github.
 
-#Ejemplo Pyton
+# Ejemplo Pyton
 def onmessage(update,bot:ObigramClient):
     message = bot.sendMessage(update.message.chat.id,'Procesando...')
 def onCD(update,bot:ObigramClient):
@@ -17,6 +17,6 @@ if __name__ == '__main__':
     bot.onMessage(onmessage)
     bot.run()
 
-#Contactame
+# Contactame
 Telegram : https://t.me/obisoftdev
 Whatsapp : +5354858181
