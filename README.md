@@ -3,9 +3,7 @@ api sencilla para la creacion de bots de telegram , actualmente v0.1 , la estara
 
 # Ejemplo Pyton
 
-    $ python3
-    
-    from pyobigram.utils import sizeof_fmt,downloadProgressFile
+    $ python 3
     from pyobigram.client import ObigramClient
     
     def onmessage(update,bot:ObigramClient):
