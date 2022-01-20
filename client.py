@@ -18,6 +18,7 @@ class ObigramClient(object):
         self.funcs = {}
         self.update_id = 0
         self.onmessage = None
+        self.oninline = None
 
         self.SendFileTypes = {'document':'SendDocument','video':'SendVideo'}
 
@@ -47,9 +48,15 @@ class ObigramClient(object):
                 except:pass
 
                 try:
-                    if self.onmessage:
                         for update in updates:
-                            self.startNewThred(self.onmessage,(update,self))
+                            try:
+                                if update.inline_query:
+                                    if self.oninline:
+                                        self.startNewThred(self.oninline,(update,self))
+                                    break
+                            except:
+                                if self.onmessage:
+                                    self.startNewThred(self.onmessage,(update,self))
                 except:pass
 
             except Exception as ex:
@@ -57,13 +64,14 @@ class ObigramClient(object):
             pass
         pass
 
-    def sendMessage(self,chat_id=0,text=''):
-        sendMessageUrl = self.path + 'sendMessage?chat_id=' + str(chat_id) + '&text=' + text
+    def sendMessage(self,chat_id=0,text='',parse_mode=''):
+        #parse_mode = html markdown
+        sendMessageUrl = self.path + 'sendMessage?chat_id=' + str(chat_id) + '&text=' + text + '&parse_mode=' + parse_mode
         result = requests.get(sendMessageUrl).text
         return json.loads(result, object_hook = lambda d : Namespace(**d)).result
 
-    def editMessageText(self,message,text=''):
-        editMessageUrl = self.path+'editMessageText?chat_id='+str(message.chat.id)+'&message_id='+str(message.message_id)+'&text=' + text
+    def editMessageText(self,message,text='',parse_mode=''):
+        editMessageUrl = self.path+'editMessageText?chat_id='+str(message.chat.id)+'&message_id='+str(message.message_id)+'&text=' + text + '&parse_mode=' + parse_mode
         result = requests.get(editMessageUrl).text
         return json.loads(result, object_hook = lambda d : Namespace(**d)).result
     
@@ -110,6 +118,32 @@ class ObigramClient(object):
             file_wr.close()
         return destname
 
+    def answerInline(self,inline_query_id=0,result=[]):
+        answerUrl = self.path + 'answerInlineQuery'
+        payload = { 'inline_query_id' : inline_query_id,'results':result}
+        result = requests.post(answerUrl,json=payload).text
+        parse = json.loads(result, object_hook = lambda d : Namespace(**d))
+        sussesfull = False
+        try: 
+            sussesfull = parse.ok and parse.result 
+            if sussesfull == False:
+                 print('Error InlineAnswer: '+str(parse.description))
+        except: pass
+        return sussesfull
+
     def on (self,name,func):self.funcs[name] = func
     def onMessage (self,func):self.onmessage = func
+    def onInline(self,func):self.oninline = func
 
+
+#Inline Queries
+def inlineQueryResultArticle(id=0,title='',text='',description='',url='',hide_url=False,thumb_url='',thumb_width=10,thumb_height=10):
+    return {'type':'article',
+            'id':id,
+            'title':title,
+            'input_message_content':{'message_text':text,'description':description},
+            'url':url,
+            'hide_url':hide_url,
+            'thumb_url':thumb_url,
+            'thumb_width':thumb_width,
+            'thumb_height':thumb_height}
