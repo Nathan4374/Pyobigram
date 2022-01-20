@@ -1,7 +1,7 @@
 # pyobigram v0.2
 api sencilla para la creacion de bots de telegram , la estara actualizando aqui en mi github.
 
-# Ejemplo Pyton
+# Ejemplo Base (Pyton)
 
     $ python 3
     from pyobigram.client import ObigramClient
@@ -21,9 +21,9 @@ api sencilla para la creacion de bots de telegram , la estara actualizando aqui 
     debuelbe un objeto fileinfo : bot.getFile(file_id) : extrae informacion de ese archivo
     debuelbe un str ruta : bot.downloadFile(file_id=0,destname='',progressfunc=None,args=None) : descarga un archivo 
     debuelbe un bolean : bot.answerInline(inline_query_id=0,result=[]) : responder al modo inline
-    bot.on(func) : inicia la escucha de un comando
-    bot.onMessage(func) : inicia la escucha de una actualizacion completa
-    bot.onInline(func) : inicia la escucha en el modo inline
+    bot.on(cmd_hanlde) : inicia la escucha de un comando , loas parametros del handle son (update,bot)
+    bot.onMessage(message_handle) : inicia la escucha de una actualizacion completa , loas parametros del handle son (update,bot)
+    bot.onInline(inline_handle) : inicia la escucha en el modo inline , loas parametros del handle son (update,bot)
 
 # funciones
      from pyobigram.client import inlineQueryResultArticle
