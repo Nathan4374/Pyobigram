@@ -1,6 +1,6 @@
 __title__ = "pyobigram"
 __description__ = "Python web scraper for telergam"
-__version__ = "0.2.0"
+__version__ = "0.4.0"
 __author__ = "ObisoftDev"
 __author_email__ = "obisoftdev@gmail.com"
 __url__ = "https://github.com/Obysoftt/pyobigram"
