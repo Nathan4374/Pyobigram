@@ -35,7 +35,7 @@ class ObigramClient(object):
                 getUpdateUrl = self.path + 'getUpdates?offset=' + str(self.update_id+1)
                 update = requests.get(getUpdateUrl)
 
-                updates = json.loads(update.text, object_hook = lambda d : Namespace(**d)).result
+                updates = json.loads(str(update.text).replase('from','sender'), object_hook = lambda d : Namespace(**d)).result
 
                 if len(updates) > 0:
                     self.update_id = updates[-1].update_id
