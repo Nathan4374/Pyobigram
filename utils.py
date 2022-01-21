@@ -50,11 +50,15 @@ def downloadProgressFile(url='',dest='',progressfunc=None,args=None):
                     tcurrent = time.time() - time_start
                     time_total += tcurrent
                     time_start = time.time()
-                    file_wr.write(chunk)
                     if time_total>=1:
                         if progressfunc:
                             progressfunc(file_name,chunk_por,total,size_per_second,args)
                         time_total = 0
                         size_per_second = 0
+                    file_wr.write(chunk)
             file_wr.close()
         return dest+file_name
+
+def get_file_size(file):
+    file_size = os.stat(file)
+    return file_size.st_size

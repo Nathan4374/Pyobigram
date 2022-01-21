@@ -65,15 +65,32 @@ class ObigramClient(object):
         pass
 
     def sendMessage(self,chat_id=0,text='',parse_mode=''):
-        #parse_mode = html markdown
+        text=text.replace('%', '%25')
+        text=text.replace('#', '%23')
+        text=text.replace('+', '%2B')
+        text=text.replace('*', '%2A')
+        text=text.replace('&', '%26')
         sendMessageUrl = self.path + 'sendMessage?chat_id=' + str(chat_id) + '&text=' + text + '&parse_mode=' + parse_mode
         result = requests.get(sendMessageUrl).text
         return json.loads(result, object_hook = lambda d : Namespace(**d)).result
 
     def editMessageText(self,message,text='',parse_mode=''):
+        text=text.replace('%', '%25')
+        text=text.replace('#', '%23')
+        text=text.replace('+', '%2B')
+        text=text.replace('*', '%2A')
+        text=text.replace('&', '%26')
         editMessageUrl = self.path+'editMessageText?chat_id='+str(message.chat.id)+'&message_id='+str(message.message_id)+'&text=' + text + '&parse_mode=' + parse_mode
         result = requests.get(editMessageUrl).text
-        return json.loads(result, object_hook = lambda d : Namespace(**d)).result
+        parse = json.loads(result, object_hook = lambda d : Namespace(**d))
+        sussesfull = False
+        try: 
+            sussesfull = parse.ok and parse.result 
+            if sussesfull == False:
+                 print('Error sendMessage: '+str(parse.description))
+        except: pass
+        message.text = text
+        return message
     
     def sendFile(self,chat_id,file,type='document'):
         sendDocumentUrl = self.path + self.SendFileTypes[type]
