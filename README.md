@@ -1,4 +1,4 @@
-# pyobigram v0.4
+# pyobigram v1.6
 api sencilla para la creacion de bots de telegram , la estara actualizando aqui en mi github.
 
 # Ejemplo Base (Pyton)
