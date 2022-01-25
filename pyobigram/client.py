@@ -113,7 +113,7 @@ class ObigramClient(object):
         self.threads.clear()
         pass
 
-    def sendMessage(self,chat_id=0,text='',parse_mode=''):
+    def sendMessage(self,chat_id=0,text='',parse_mode='',reply_to_message_id=0):
         try:
             text=text.replace('%', '%25')
             text=text.replace('#', '%23')
@@ -211,13 +211,20 @@ class ObigramClient(object):
 
 
 #Inline Queries
-def inlineQueryResultArticle(id=0,title='',text='',description='',url='',hide_url=False,thumb_url='',thumb_width=10,thumb_height=10):
+def inlineQueryResultArticle(id=0,title='',text='',text_parse_mode='',description='',url='',hide_url=False,thumb_url='',thumb_width=10,thumb_height=10):
+    text=text.replace('%', '%25')
+    text=text.replace('#', '%23')
+    text=text.replace('+', '%2B')
+    text=text.replace('*', '%2A')
+    text=text.replace('&', '%26')
     return {'type':'article',
             'id':id,
             'title':title,
-            'input_message_content':{'message_text':text,'description':description},
+            'input_message_content':{'message_text':text,'parse_mode':text_parse_mode},
+            'description':description,
             'url':url,
             'hide_url':hide_url,
             'thumb_url':thumb_url,
             'thumb_width':thumb_width,
-            'thumb_height':thumb_height}
+            'thumb_height':thumb_height,
+            'parse_mode':text_parse_mode}
